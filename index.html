@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Daily Shaper - A premium habit and fitness tracker designed for work-from-home users to stay healthy, active, and fit.">
+<title>Daily Shaper</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Onboarding Modal Wizard -->
+<div class="onboarding-overlay" id="onboarding-overlay">
+  <div class="onboarding-card">
+    <!-- Step 1: Welcome -->
+    <div class="onboarding-step active" id="onstep-1">
+      <h2 class="onboarding-title" style="text-align: center; margin-bottom: 12px;">🌟 Daily Shaper</h2>
+      <div style="font-size: 50px; text-align: center; margin-bottom: 20px;">🧘‍♂️</div>
+      <p class="onboarding-subtitle" style="text-align: center; font-size: 14px;">
+        Welcome! Daily Shaper helps desk workers and students who sit for long hours stay fit, active, lose weight, and care for their posture. Let's personalize your plan!
+      </p>
+      <button class="onboarding-btn" onclick="nextOnboardingStep(2)">Get Started</button>
+    </div>
+
+    <!-- Step 2: Basic Info -->
+    <div class="onboarding-step" id="onstep-2">
+      <h2 class="onboarding-title">Tell us about yourself</h2>
+      <p class="onboarding-subtitle">We need a few details to calculate your metabolism targets.</p>
+      
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Your Name</label>
+        <input type="text" id="on-name" placeholder="e.g. Aly" class="onboarding-input">
+      </div>
+      
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Age (years)</label>
+        <input type="number" id="on-age" placeholder="e.g. 28" class="onboarding-input" min="10" max="100">
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Biological Sex</label>
+        <select id="on-gender" class="onboarding-select">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="onboarding-btn secondary" onclick="nextOnboardingStep(1)" style="flex: 1;">Back</button>
+        <button class="onboarding-btn" onclick="validateStep2()" style="flex: 2;">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Body Metrics -->
+    <div class="onboarding-step" id="onstep-3">
+      <h2 class="onboarding-title">Body measurements</h2>
+      <p class="onboarding-subtitle">Your weight and height determine your basic daily energy expenditures.</p>
+      
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Height (cm)</label>
+        <input type="number" id="on-height" placeholder="e.g. 175" class="onboarding-input" min="100" max="250">
+      </div>
+      
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Current Weight (kg)</label>
+        <input type="number" id="on-weight" placeholder="e.g. 82.5" class="onboarding-input" step="0.1" min="30" max="300">
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Target Weight (kg)</label>
+        <input type="number" id="on-target-weight" placeholder="e.g. 75" class="onboarding-input" step="0.1" min="30" max="300">
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="onboarding-btn secondary" onclick="nextOnboardingStep(2)" style="flex: 1;">Back</button>
+        <button class="onboarding-btn" onclick="validateStep3()" style="flex: 2;">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Activity & Fit levels -->
+    <div class="onboarding-step" id="onstep-4">
+      <h2 class="onboarding-title">Activity level</h2>
+      <p class="onboarding-subtitle">How active are you daily (outside of structured workouts)?</p>
+      
+      <div class="onboarding-radio-group" id="group-activity">
+        <div class="onboarding-radio selected" onclick="selectRadio('activity', 'sedentary', this)">
+          <span>Sedentary (mostly sitting)</span><span>1.2x</span>
+        </div>
+        <div class="onboarding-radio" onclick="selectRadio('activity', 'lightly', this)">
+          <span>Lightly active (standing/walking)</span><span>1.375x</span>
+        </div>
+        <div class="onboarding-radio" onclick="selectRadio('activity', 'moderately', this)">
+          <span>Moderately active (moving around)</span><span>1.55x</span>
+        </div>
+      </div>
+
+      <h2 class="onboarding-title" style="margin-top: 14px; font-size: 16px;">Starting Knee/Arm Level</h2>
+      <div style="display: flex; gap: 10px; margin-top: 6px; margin-bottom: 18px;">
+        <div style="flex: 1;">
+          <label style="font-size: 10px; color: var(--mu); font-family: monospace;">KNEE TRACK</label>
+          <select id="on-knee-lvl" class="onboarding-select" style="margin-top: 4px;">
+            <option value="1">Level 1 (Gentle)</option>
+            <option value="2">Level 2 (Medium)</option>
+            <option value="3">Level 3 (Strong)</option>
+          </select>
+        </div>
+        <div style="flex: 1;">
+          <label style="font-size: 10px; color: var(--mu); font-family: monospace;">ARM TRACK</label>
+          <select id="on-arm-lvl" class="onboarding-select" style="margin-top: 4px;">
+            <option value="1">Level 1 (Light)</option>
+            <option value="2">Level 2 (Medium)</option>
+            <option value="3">Level 3 (Strong)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="onboarding-btn secondary" onclick="nextOnboardingStep(3)" style="flex: 1;">Back</button>
+        <button class="onboarding-btn" onclick="nextOnboardingStep(5)" style="flex: 2;">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Goals -->
+    <div class="onboarding-step" id="onstep-5">
+      <h2 class="onboarding-title">Your Goals</h2>
+      <p class="onboarding-subtitle">Select what targets you want to focus on (Select all that apply).</p>
+
+      <div class="onboarding-radio-group">
+        <label class="onboarding-radio" id="goal-weight">
+          <span>🔥 Lose excess weight</span>
+          <input type="checkbox" id="goal-chk-weight" checked style="margin-left: 10px;">
+        </label>
+        <label class="onboarding-radio" id="goal-posture">
+          <span>🦒 Improve neck/back posture</span>
+          <input type="checkbox" id="goal-chk-posture" checked style="margin-left: 10px;">
+        </label>
+        <label class="onboarding-radio" id="goal-energy">
+          <span>⚡ Boost active daily energy</span>
+          <input type="checkbox" id="goal-chk-energy" checked style="margin-left: 10px;">
+        </label>
+        <label class="onboarding-radio" id="goal-hydration">
+          <span>💧 Establish hydration habit</span>
+          <input type="checkbox" id="goal-chk-hydration" checked style="margin-left: 10px;">
+        </label>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="onboarding-btn secondary" onclick="nextOnboardingStep(4)" style="flex: 1;">Back</button>
+        <button class="onboarding-btn" onclick="completeOnboarding()" style="flex: 2;">Finish & Calculate</button>
+      </div>
+    </div>
+
+    <!-- Step Indicator Dots -->
+    <div class="onboarding-progress">
+      <div class="onboarding-dot active" id="ondot-1"></div>
+      <div class="onboarding-dot" id="ondot-2"></div>
+      <div class="onboarding-dot" id="ondot-3"></div>
+      <div class="onboarding-dot" id="ondot-4"></div>
+      <div class="onboarding-dot" id="ondot-5"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Gamification Elements -->
+<div class="xp-popup" id="xp-popup">
+  <span class="xp-popup-icon">⚡</span>
+  <span class="xp-popup-text" id="xp-popup-text">+15 XP</span>
+</div>
+<div class="confetti-container" id="confetti-container"></div>
+
+<!-- Topbar & Header -->
+<div class="topbar">
+  <h1>Daily Shaper</h1>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <div class="xp-level-badge" id="xp-level-badge" title="Your fitness level">Lv 1</div>
+    <div class="streak-pill">
+      <div class="snum" id="streak-num">0</div>
+      <div class="slbl">day<br>streak</div>
+    </div>
+  </div>
+</div>
+<div class="xp-bar-wrap">
+  <div class="xp-bar-fill" id="xp-bar-fill"></div>
+</div>
+
+<!-- Navigation Tabs for Desktop -->
+<div class="tabs" id="desktop-tabs">
+  <button class="tab active" onclick="switchTab('today')">Today</button>
+  <button class="tab" onclick="switchTab('progress')">Progress</button>
+  <button class="tab" onclick="switchTab('profile')">Profile</button>
+</div>
+
+<!-- PAGE: TODAY -->
+<div class="page active" id="page-today">
+  <!-- Daily Motivation Tip Card -->
+  <div class="daily-tip" id="daily-tip">
+    <div class="daily-tip-icon" id="tip-icon">💡</div>
+    <div class="daily-tip-text" id="tip-text">Set screen displays to eye height to protect your neck from long hours of study!</div>
+    <button class="daily-tip-dismiss" onclick="dismissTip()">✕</button>
+  </div>
+
+  <!-- Day Selection Navigator -->
+  <div class="daynav">
+    <button class="navbtn" id="prev-btn" onclick="shiftDay(-1)">&#8592;</button>
+    <div class="navlabel">
+      <span class="dayname" id="nav-dayname">Sunday</span>
+      <span class="datestr" id="nav-datestr">Jul 5, 2026</span>
+    </div>
+    <span class="today-tag" id="today-tag" onclick="goToday()" style="display:none">&#8594; Today</span>
+    <button class="navbtn" id="next-btn" onclick="shiftDay(1)">&#8594;</button>
+  </div>
+
+  <!-- Main compliance indicators -->
+  <div class="statsrow">
+    <div class="sc"><div class="sv" id="food-pct" style="color:var(--gr)">–</div><div class="sk">Food</div><div class="pbar"><div class="pbfill" id="food-bar" style="width:0%"></div></div></div>
+    <div class="sc"><div class="sv" id="work-pct" style="color:var(--bl)">–</div><div class="sk">Workout</div><div class="pbar"><div class="pbfill" id="work-bar" style="width:0%;background:var(--bl)"></div></div></div>
+    <div class="sc"><div class="sv" id="total-lost" style="color:var(--yw)">–</div><div class="sk">kg lost · trend</div></div>
+  </div>
+
+  <!-- Water tracker widget -->
+  <div class="sec">
+    <div class="shead">
+      <div class="stitle">💧 Hydration log</div>
+      <div class="sprog" id="water-prog">0 / 2000 ml</div>
+    </div>
+    <div style="padding: 16px; display: flex; align-items: center; gap: 20px;">
+      <div class="water-progress">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="38" fill="none" stroke="var(--bd)" stroke-width="5"/>
+          <circle cx="45" cy="45" r="38" fill="none" stroke="var(--water)" stroke-width="5" stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="238.76" id="water-ring" style="transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 0.6s ease;"/>
+        </svg>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+          <div style="font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700;" id="water-amount">0</div>
+          <div style="font-size: 9px; color: var(--mu); font-family: 'Space Mono', monospace;">ML</div>
+        </div>
+      </div>
+      <div style="flex: 1;">
+        <div class="water-buttons">
+          <button class="water-btn" onclick="addWater(250)">+250ml</button>
+          <button class="water-btn" onclick="addWater(500)">+500ml</button>
+          <button class="water-btn" onclick="addWater(1000)">+1L</button>
+        </div>
+        <div style="display: flex; gap: 6px; margin-top: 8px; align-items: center;">
+          <input type="number" id="water-custom" placeholder="ml" min="50" max="2000" step="50" style="flex: 1; background: var(--s2); border: 1px solid var(--bd); border-radius: 8px; padding: 7px 12px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--tx); outline: none;">
+          <button class="water-btn" onclick="addWaterCustom()" style="flex-shrink: 0;">Add</button>
+        </div>
+        <button onclick="undoWater()" style="margin-top: 8px; background: none; border: none; color: var(--mu); font-size: 11px; font-family: 'Space Mono', monospace; cursor: pointer; text-decoration: underline;">Undo last log</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calorie budget and intake widget -->
+  <div class="sec">
+    <div class="shead">
+      <div class="stitle">🔥 Nutrition tracking</div>
+      <div class="sprog" id="cal-prog">0 / 2200 kcal</div>
+    </div>
+    <div style="padding: 16px;">
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
+        <div class="cal-ring-wrap" style="position: relative; width: 80px; height: 80px; flex-shrink: 0;">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--bd)" stroke-width="5"/>
+            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--yw)" stroke-width="5" stroke-linecap="round" stroke-dasharray="213.63" stroke-dashoffset="213.63" id="cal-ring" style="transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 0.6s ease;"/>
+          </svg>
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+            <div style="font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700;" id="cal-remaining">2200</div>
+            <div style="font-size: 8px; color: var(--mu); font-family: 'Space Mono', monospace;">LEFT</div>
+          </div>
+        </div>
+        <div class="cal-summary" style="flex: 1;">
+          <div id="cal-breakdown" style="font-size: 12px; color: var(--mu); font-family: 'Space Mono', monospace; line-height: 1.8;">
+            Target: 2200 kcal<br>Food logged: 0 kcal<br>Workout burn: 0 kcal
+          </div>
+        </div>
+      </div>
+      <div class="cal-meals-list" id="cal-meals-list">
+        <!-- Logged meals list here -->
+      </div>
+      <div style="display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap;">
+        <select id="cal-meal-type" style="flex: 1; min-width: 100px; background: var(--s2); border: 1px solid var(--bd); border-radius: 8px; padding: 7px 10px; font-family: 'Syne', sans-serif; font-size: 12px; color: var(--tx); outline: none;">
+          <option value="breakfast">🌅 Breakfast</option>
+          <option value="lunch">☀️ Lunch</option>
+          <option value="dinner">🌙 Dinner</option>
+          <option value="snack">🍎 Snack</option>
+        </select>
+        <input type="text" id="cal-meal-name" placeholder="What did you eat?" style="flex: 2; min-width: 120px; background: var(--s2); border: 1px solid var(--bd); border-radius: 8px; padding: 7px 10px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--tx); outline: none;">
+        <input type="number" id="cal-meal-cals" placeholder="kcal" min="0" max="5000" style="width: 70px; background: var(--s2); border: 1px solid var(--bd); border-radius: 8px; padding: 7px 10px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--tx); outline: none;">
+        <button class="logbtn" onclick="addMeal()">Log</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Food Avoid checklist (Keep original) -->
+  <div class="sec">
+    <div class="shead"><div class="stitle">Avoid today</div><div class="sprog" id="food-prog">0 / 11</div></div>
+    <div id="food-list"></div>
+  </div>
+
+  <!-- Home Workout checklist (Keep original) -->
+  <div class="sec">
+    <div class="shead"><div class="stitle">Home workout</div><div class="sprog" id="work-prog">0 / 13</div></div>
+    <div id="program-banner" style="padding:10px 16px;border-bottom:1px solid var(--bd);background:var(--s2)"></div>
+    <div style="padding:8px 16px;border-bottom:1px solid var(--bd);background:#f1ecfb;font-size:10px;color:#6a48c8;font-family:'Space Mono',monospace;line-height:1.6">
+      Level up a track only when ALL THREE hold for a full week: ① no pain during or after &nbsp;② full slow control on every rep &nbsp;③ last set feels easy. One signal missing = stay at your level.
+    </div>
+    <div id="work-list"></div>
+  </div>
+
+  <!-- Study Break checklist + Timer (Keep original) -->
+  <div class="sec">
+    <div class="shead"><div class="stitle">Study breaks · every ~60 min</div><div class="sprog" id="break-prog">round 1 · 0/4</div></div>
+    <div style="padding:10px 16px;border-bottom:1px solid var(--bd);background:#fdeae7;display:flex;gap:8px;align-items:flex-start">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <span style="font-size:11px;color:#c4382d;font-family:'Space Mono',monospace;line-height:1.6">Long sitting weakens the knees and strains the back over time. Each completed round banks automatically — 3 rounds a day = full break score, and break score now counts toward your daily compliance.</span>
+    </div>
+    <div style="padding:10px 16px;border-bottom:1px solid var(--bd);background:#f1ecfb;display:flex;gap:8px;align-items:flex-start">
+      <span style="font-size:16px;flex-shrink:0">🦒</span>
+      <span style="font-size:11px;color:#6a48c8;font-family:'Space Mono',monospace;line-height:1.6"><strong>Neck care — both suspects covered:</strong> Screens: laptop top edge at eye level (stack books under it), phone raised to eye height — not in your lap. Sleep: one medium pillow that fills the gap between neck and mattress; avoid sleeping on your stomach with a twisted head. ⚠ If pain radiates to an arm, or you get numbness/tingling in the hands, that needs a professional — not a checklist.</span>
+    </div>
+    <div id="break-list"></div>
+
+    <!-- Study break timer widget -->
+    <div class="timer-widget">
+      <div class="timer-label-row">
+        <span class="timer-session-label">Study break timer</span>
+        <span id="timer-sessions" style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">0 timers finished today</span>
+      </div>
+      <div id="notif-bar" style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 10px;background:#fdf3df;border:1px solid #f5ddb0;border-radius:7px">
+        <span style="font-size:13px">🔔</span>
+        <span id="notif-status-text" style="font-size:11px;color:#b06c08;font-family:'Space Mono',monospace;flex:1">Allow notifications so you get alerted even when this tab is in the background</span>
+        <button id="notif-btn" onclick="requestNotifPermission()" style="background:var(--yw);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap">Allow</button>
+      </div>
+      <div class="timer-presets">
+        <div class="tpreset active" onclick="setTimer(60,this)">60 min</div>
+        <div class="tpreset" onclick="setTimer(45,this)">45 min</div>
+        <div class="tpreset" onclick="setTimer(30,this)">30 min</div>
+        <div class="tpreset" onclick="setTimer(25,this)">25 min</div>
+      </div>
+      <div class="timer-ring-wrap">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="timer-ring-bg" cx="60" cy="60" r="52"/>
+          <circle class="timer-ring-fill" id="timer-ring" cx="60" cy="60" r="52"
+            stroke-dasharray="326.7" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-center">
+          <div class="ttime" id="timer-display">60:00</div>
+          <div class="tstatus" id="timer-status">ready</div>
+        </div>
+      </div>
+      <div class="timer-btns">
+        <button class="tbtn primary" id="timer-start-btn" onclick="timerStartStop()">Start</button>
+        <button class="tbtn" onclick="timerReset()">Reset</button>
+      </div>
+    </div>
+
+    <div style="padding:8px 16px;background:var(--s2);border-top:1px solid var(--bd);display:flex;align-items:center;gap:10px">
+      <button onclick="resetBreaks()" style="background:none;border:1px solid var(--bd);border-radius:6px;padding:5px 12px;color:var(--mu);font-family:'Syne',sans-serif;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;">Clear current round</button>
+      <span style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">Round banks itself when all 4 are checked · 3 rounds = full score</span>
+    </div>
+  </div>
+
+  <!-- Weight Logger Widget -->
+  <div class="wsec">
+    <div class="shead" style="padding:0 0 12px;border:none;margin-bottom:12px;border-bottom:1px solid var(--bd)">
+      <div class="stitle" id="wt-title">Weight log</div>
+      <div class="sprog" id="wt-display">–</div>
+    </div>
+    <div class="wrow">
+      <div class="wgroup"><label id="wt-label">Weight (kg)</label><input type="number" id="wt-input" step="0.1" min="30" max="300" placeholder="e.g. 85.5"/></div>
+      <button class="logbtn" onclick="logWeight()">Log</button>
+    </div>
+    <div id="wt-entries"></div>
+  </div>
+</div>
+
+<!-- PAGE: PROGRESS -->
+<div class="page" id="page-progress">
+  <div class="phead">Overall stats</div>
+  <div class="bigstat-row">
+    <div class="bigstat"><div class="bv" id="p-days" style="color:var(--bl)">0</div><div class="bk">Days tracked</div><div class="bsub" id="p-days-sub">–</div></div>
+    <div class="bigstat"><div class="bv" id="p-lost" style="color:var(--gr)">–</div><div class="bk">kg lost · 7d trend</div><div class="bsub" id="p-lost-sub">–</div></div>
+    <div class="bigstat"><div class="bv" id="p-bstreak" style="color:var(--yw)">0</div><div class="bk">Best streak</div><div class="bsub">days in a row</div></div>
+    <div class="bigstat"><div class="bv" id="p-avg" style="color:var(--gr)">–</div><div class="bk">Avg compliance</div><div class="bsub" id="p-avg-sub">food + workout + breaks</div></div>
+  </div>
+
+  <div class="chart-box">
+    <div class="chart-title">Weight trend</div>
+    <div id="wt-chart"><div class="nodata">Log weight on the Today tab to see your trend</div></div>
+  </div>
+
+  <div class="chart-box">
+    <div class="chart-title">Daily compliance · last 14 days</div>
+    <div id="comp-chart"><div class="nodata">Start checking off days to see compliance</div></div>
+  </div>
+
+  <!-- Water history chart -->
+  <div class="chart-box">
+    <div class="chart-title">Water intake · last 7 days</div>
+    <div id="water-chart"><div class="nodata">Start tracking water to see your history</div></div>
+  </div>
+
+  <div class="chart-box">
+    <div class="chart-title">Activity heatmap · last 70 days</div>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:2px;background:#f6e8ee;display:inline-block"></span><span style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">none</span></span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:2px;background:#f9cfe0;display:inline-block"></span><span style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">1–40%</span></span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:2px;background:#e8629b;display:inline-block"></span><span style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">41–80%</span></span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:2px;background:#cf2a6e;display:inline-block"></span><span style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">80%+</span></span>
+    </div>
+    <div id="heatmap"></div>
+    <div style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace;margin-top:8px">Tap any cell to jump to that day</div>
+  </div>
+
+  <div class="insight" id="insight-box">
+    <div class="insight-tag">Expert insight</div>
+    <div class="insight-text" id="insight-text">Start tracking to get personalized insights here.</div>
+  </div>
+
+  <div class="phead">Achievements</div>
+  <div class="ach-grid" id="ach-grid"></div>
+</div>
+
+<!-- PAGE: PROFILE & SETTINGS -->
+<div class="page" id="page-profile">
+  <div class="profile-header">
+    <div class="profile-avatar" id="profile-avatar">👤</div>
+    <div class="profile-name" id="profile-name">Desksitter Warrior</div>
+    <div style="font-size:12px;color:var(--mu);font-family:'Space Mono',monospace" id="profile-subtitle">Personal Plan Targets</div>
+  </div>
+
+  <!-- Calculated Profile Statistics Grid -->
+  <div class="profile-stats-grid">
+    <div class="profile-stat-card">
+      <div class="profile-stat-value" id="prof-bmi">–</div>
+      <div class="profile-stat-label">BMI</div>
+      <div class="profile-stat-badge" id="prof-bmi-badge">Normal</div>
+    </div>
+    <div class="profile-stat-card">
+      <div class="profile-stat-value" id="prof-bmr">–</div>
+      <div class="profile-stat-label">BMR</div>
+      <div style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">kcal/day resting</div>
+    </div>
+    <div class="profile-stat-card">
+      <div class="profile-stat-value" id="prof-tdee">–</div>
+      <div class="profile-stat-label">TDEE</div>
+      <div style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">kcal/day active</div>
+    </div>
+    <div class="profile-stat-card">
+      <div class="profile-stat-value" id="prof-target-cal">–</div>
+      <div class="profile-stat-label">Cal Budget</div>
+      <div style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">kcal to lose weight</div>
+    </div>
+    <div class="profile-stat-card">
+      <div class="profile-stat-value" id="prof-water-goal">–</div>
+      <div class="profile-stat-label">Water Target</div>
+      <div style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace">ml hydration target</div>
+    </div>
+    <div class="profile-stat-card">
+      <div class="profile-stat-value" id="prof-xp">0</div>
+      <div class="profile-stat-label">Total XP</div>
+      <div style="font-size:10px;color:var(--mu);font-family:'Space Mono',monospace" id="prof-level-title">Lv 1 Gym Initiate</div>
+    </div>
+  </div>
+
+  <!-- Settings Area -->
+  <div class="sec" style="margin-top: 16px;">
+    <div class="shead"><div class="stitle">⚙️ App Preference Settings</div></div>
+    <div class="settings-group">
+      <div class="settings-row">
+        <span class="settings-label">🌙 Dark Mode Theme</span>
+        <div class="settings-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()"></div>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label">📐 Units System</span>
+        <span style="font-size:12px;color:var(--mu);font-family:'Space Mono',monospace">Metric (kg/cm)</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="profile-edit-btn" onclick="showOnboarding()">✏️ Edit Profile Info</button>
+
+  <!-- Backup & Cloud Synchronization Panel -->
+  <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin-top:14px">
+    <div style="font-size:11px;font-family:'Space Mono',monospace;color:var(--bl);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">💾 Backup & Sync</div>
+    <div id="storage-status" style="font-size:11px;font-family:'Space Mono',monospace;margin-bottom:10px;color:#6a48c8">checking storage...</div>
+    <div style="font-size:11px;color:#6a48c8;font-family:'Space Mono',monospace;line-height:1.6;margin-bottom:10px">Export your data to a file. Save it to Google Drive, email, or anywhere safe. Use Import on any device to restore it. <strong style="color:var(--bl)">Do this weekly.</strong></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button id="export-btn" onclick="exportData()" style="flex:1;min-width:120px;background:var(--bl);color:#fff;border:none;border-radius:7px;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px">⬇ Export backup</button>
+      <button onclick="importData()" style="flex:1;min-width:120px;background:var(--s2);color:var(--bl);border:1px solid var(--bl);border-radius:7px;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px">⬆ Import from file</button>
+      <button onclick="importFromPaste()" style="background:none;color:var(--mu);border:1px solid var(--bd);border-radius:7px;padding:9px 14px;font-family:'Syne',sans-serif;font-size:12px;cursor:pointer">Paste</button>
+    </div>
+  </div>
+
+  <!-- Clear & Reset System Triggers -->
+  <div style="display:flex;gap:10px;margin-top:14px">
+    <button class="resetbtn" id="reset-day-btn" data-confirm="0" onclick="resetDay()" style="flex:1">Reset this day</button>
+    <button class="resetbtn" id="reset-all-btn" data-confirm="0" onclick="resetAll()" style="flex:1;border-color:#f6c5be;color:var(--rd)" onmouseover="this.style.background='#fdeae7'" onmouseout="this.style.background='none'">⚠ Reset everything</button>
+  </div>
+</div>
+
+<!-- Bottom Navigation for Mobile -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bottom-nav-item active" id="nav-item-today" onclick="switchTab('today')">
+    <span class="bottom-nav-icon">📋</span>
+    <span class="bottom-nav-label">Today</span>
+  </button>
+  <button class="bottom-nav-item" id="nav-item-progress" onclick="switchTab('progress')">
+    <span class="bottom-nav-icon">📊</span>
+    <span class="bottom-nav-label">Progress</span>
+  </button>
+  <button class="bottom-nav-item" id="nav-item-profile" onclick="switchTab('profile')">
+    <span class="bottom-nav-icon">👤</span>
+    <span class="bottom-nav-label">Profile</span>
+  </button>
+</nav>
+
+<script src="app.js"></script>
+</body>
+</html>

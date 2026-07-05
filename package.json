@@ -1,0 +1,9 @@
+{
+  "name": "daily-shaper",
+  "version": "1.0.0",
+  "description": "Daily habit and fitness tracker",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "test": "node --test tests/logic.test.js"
+  }
+}
