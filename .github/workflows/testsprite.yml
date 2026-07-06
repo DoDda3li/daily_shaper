@@ -1,0 +1,43 @@
+name: TestSprite Verification Loop
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install TestSprite CLI
+        run: npm install -g @testsprite/testsprite-cli
+
+      - name: Configure TestSprite
+        env:
+          TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+        run: testsprite setup --from-env --yes --agent claude
+
+      - name: Verify onboarding flow
+        env:
+          TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+        run: testsprite test rerun a7242864-03a8-4816-98a4-2adf00f0d670 --wait
+
+      - name: Verify food checklist flow
+        env:
+          TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+        run: testsprite test rerun f4203221-3416-4c19-90f6-f632f9c6c226 --wait
+
+      - name: Verify weight log flow
+        env:
+          TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+        run: testsprite test rerun 6ee7e8df-1455-4603-b178-a2a24781dd5a --wait
+
+      - name: Verify study timer flow
+        env:
+          TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+        run: testsprite test rerun c4cdd7ed-1c7c-4196-a96e-ded81497e3ad --wait
