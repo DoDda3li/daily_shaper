@@ -1,73 +1,30 @@
 # Daily Shaper
 
-Daily Shaper is a premium, gamified single-page fitness and habit tracker designed specifically for remote workers, students, and desksitters who spend long hours sitting at home. It helps users stay active, lose weight, care for their neck and knee joints, track hydration, and maintain daily calorie budgets.
+Daily Shaper is a fitness and habit tracker built for desk workers and students who sit for long hours. It helps users stay active, lose weight, care for their knees/neck/posture, track hydration, and manage daily calorie targets.
+
+**Live app:** https://dodda3li.github.io/daily_shaper/
 
 ## Features
+- Personalized onboarding wizard (age, sex, height, weight, activity level) that calculates BMR/TDEE and a daily calorie target
+- Editable knee and arm rehab tracks with progressive difficulty levels
+- Daily food checklist, workout checklist, and study-break timer
+- Weight logging with trend history
+- Hydration log
+- Achievements and streak tracking
+- Data persists locally per device (works standalone, no backend required)
 
-1. **🌟 Interactive Onboarding Wizard**
-   - Personalizes targets on first launch.
-   - Calculates health metrics dynamically using standard clinical formulas.
+## Built for TestSprite Hackathon Season 3 — "Build the Loop"
 
-2. **📊 Dynamic Metabolism Profiles**
-   - **BMI**: Calculated as \(\text{Weight} / \text{Height(m)}^2\) with WHO categories (*Underweight / Normal / Overweight / Obese*).
-   - **BMR (Mifflin-St Jeor)**:
-     - Male: \(10 \times W + 6.25 \times H - 5 \times A + 5\)
-     - Female: \(10 \times W + 6.25 \times H - 5 \times A - 161\)
-   - **TDEE**: Multiplies BMR by activity factor (Sedentary: 1.2x, Lightly Active: 1.375x, Moderately Active: 1.55x).
-   - **Calorie Budget**: Set to TDEE - 500 kcal for active weight loss (capped at a healthy minimum of 1200 kcal for women and 1500 kcal for men).
+This project uses the TestSprite CLI as the Checker in a real Maker → Checker loop against the live deployed app (not localhost).
 
-3. **💧 Hydration Tracker widget**
-   - Quick-add buttons (`+250ml`, `+500ml`, `+1L`) and custom intake input.
-   - Updates animated SVG water progress rings.
-   - Undo function to reverse logs.
+**Loop summary** (full detail in [LOOP.md](./LOOP.md)):
+- 4 automated frontend tests created against the live URL: onboarding, food checklist, weight logging, study-break timer
+- One test (weight-log flow) came back **blocked** on first run — TestSprite caught a real bug: editing an existing profile silently dropped the activity level, knee/arm levels, and goal selections because `showOnboarding()` only pre-filled 6 of the profile's fields
+- Root-caused, fixed in `app.js`, pushed, and re-verified with `testsprite test rerun` — passed 24/24 steps
+- All 4 tests pass as of the latest commit
 
-4. **🔥 Calories Tracker widget**
-   - Log meals by type (breakfast, lunch, dinner, snack) with calorie calculations.
-   - Remaining calorie budget: \(\text{Budget} - \text{Consumed} + \text{Burned (via workouts)}\).
-   - Completed workout items automatically count as 25 kcal burn per item.
+## Tech
+Single-page app: `index.html`, `style.css`, `app.js`. No build step, no backend — deployable as static files (GitHub Pages).
 
-5. **⚡ Gamification (Levels & XP)**
-   - XP level badge and inline level progress bar in the topbar.
-   - Check off a food item: +10 XP.
-   - Check off a workout item: +15 XP.
-   - bank break round: +30 XP.
-   - Complete whole workout checklist: +50 XP bonus.
-   - Level formula: \(\lfloor \text{XP} / 200 \rfloor + 1\). Leveling up rewards users with visual celebrations.
-
-6. **🎨 Premium UI Redesign & Dark Mode**
-   - Interactive bottom navigation for mobile viewport sizes.
-   - Clean aesthetics with Google Fonts (`Inter`, `Syne`, `Space Mono`) and glassmorphism.
-   - Glowing neon dark mode toggle.
-
-7. **📈 Dynamic SVGs (Progress Tab)**
-   - SVGs for Weight Trend, Daily Compliance, and a new Water history chart.
-   - Interactive activity heatmap logs for the last 70 days.
-
-## File Structure
-
-```
-daily-shaper/
-├── index.html      # Mobile bottom nav, onboarding overlays, trackers
-├── style.css       # Glow states, dark/light theme variables, card styles
-├── app.js          # Onboarding validation, metabolic logic, SVGs, timers
-├── package.json    # Serve and test launch configs
-└── tests/
-    └── logic.test.js # Verification tests for core calculations
-```
-
-## Running the Application Locally
-
-1. **Serve the project**:
-   Use `npx serve` to launch a local server:
-   ```bash
-   npx serve . -p 3000
-   ```
-2. **Open in Browser**:
-   Navigate to `http://localhost:3000` to start onboarding.
-
-## Running Tests
-
-Verify pure functions and calculations with:
-```bash
-npm test
-```
+## Local setup
+Just open `index.html` in a browser, or serve the folder with any static file server.
