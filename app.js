@@ -829,7 +829,6 @@ function showOnboarding() {
   if (!overlay) return;
   overlay.classList.add('active');
   nextOnboardingStep(1);
-
   // Pre-fill profile info if exists
   const data = gs();
   if (data.profile) {
@@ -839,6 +838,17 @@ function showOnboarding() {
     document.getElementById('on-height').value = data.profile.height || '';
     document.getElementById('on-weight').value = data.profile.weight || '';
     document.getElementById('on-target-weight').value = data.profile.targetWeight || '';
+    document.getElementById('on-knee-lvl').value = data.profile.kneeLvl || 1;
+    document.getElementById('on-arm-lvl').value = data.profile.armLvl || 1;
+    onSelectedActivity = data.profile.activity || 'sedentary';
+    document.querySelectorAll('#group-activity .onboarding-radio').forEach(r => {
+      r.classList.toggle('selected', r.getAttribute('onclick').includes(`'${onSelectedActivity}'`));
+    });
+    const goals = data.profile.goals || [];
+    document.getElementById('goal-chk-weight').checked = goals.includes('Lose weight');
+    document.getElementById('goal-chk-posture').checked = goals.includes('Better posture');
+    document.getElementById('goal-chk-energy').checked = goals.includes('Daily energy');
+    document.getElementById('goal-chk-hydration').checked = goals.includes('Hydration habit');
   }
 }
 
